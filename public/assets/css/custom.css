@@ -1,0 +1,7 @@
+td {
+    align-content: center !important;
+}
+
+thead, tbody, tfoot, tr, td, th {
+    text-align: center !important;
+}
