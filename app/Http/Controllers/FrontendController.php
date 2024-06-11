@@ -34,10 +34,10 @@ class FrontendController extends Controller
     public function serviceDisplay()
     {
         $ServiceCategory = ServiceCategory::select('id', 'name')->get();
-        $Service = Service::where('type', 'new')->get();
-        $Business_Category = Business_Category::get();
+        $Service = service::select('id', 'logo', 'title', 'description')->where('type', 'new')->get();
+        $Business_Category = Business_Category::select('id', 'title', 'image', 'points_sub2')->get();
 
-        $response = ['ServiceCategory' => $ServiceCategory, 'Service' => $Service, 'Business_Category' => $Business_Category];
+        $response = ['ServiceCategory' => $ServiceCategory, 'Service' => $Service,'Business_Category'=>$Business_Category];
         return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
 
     }
@@ -73,4 +73,5 @@ class FrontendController extends Controller
         $Expertise = Expertise::with('section1', 'section2')->first();
         return response()->json(['response' => $Expertise, 'success' => true], JsonResponse::HTTP_OK);
     }
+    
 }
