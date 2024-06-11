@@ -34,8 +34,9 @@ class FrontendController extends Controller
     {
         $ServiceCategory = ServiceCategory::select('id', 'name')->get();
         $Service = service::get();
+        $Business_Category = Business_Category::get();
 
-        $response = ['ServiceCategory' => $ServiceCategory, 'Service' => $Service];
+        $response = ['ServiceCategory' => $ServiceCategory, 'Service' => $Service,'Business_Category'=>$Business_Category];
         return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
 
     }
