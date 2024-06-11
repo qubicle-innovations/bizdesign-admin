@@ -21,3 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/gethomedata', [FrontendController::class, 'index']);
 Route::get('/servicepage', [FrontendController::class, 'serviceDisplay']);
+Route::get('/aboutus', [FrontendController::class, 'aboutus']);
+Route::get('/servicepage', [FrontendController::class, 'serviceDisplay']);
+Route::get('/servicedetail/{id}', [FrontendController::class, 'serviceDetails']);
+Route::get('/businessdetail/{id}', [FrontendController::class, 'businessDetails']);
+Route::get('/expertise', [FrontendController::class, 'expertise']);

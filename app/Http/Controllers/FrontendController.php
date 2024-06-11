@@ -13,6 +13,7 @@ use App\Models\Clients;
 use App\Models\EnquiryManagement;
 use App\Models\ServiceCategory;
 use App\Models\Service;
+use App\Models\Expertise;
 
 class FrontendController extends Controller
 {
@@ -33,11 +34,43 @@ class FrontendController extends Controller
     public function serviceDisplay()
     {
         $ServiceCategory = ServiceCategory::select('id', 'name')->get();
-        $Service = service::get();
+        $Service = Service::where('type', 'new')->get();
         $Business_Category = Business_Category::get();
 
-        $response = ['ServiceCategory' => $ServiceCategory, 'Service' => $Service,'Business_Category'=>$Business_Category];
+        $response = ['ServiceCategory' => $ServiceCategory, 'Service' => $Service, 'Business_Category' => $Business_Category];
         return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
 
+    }
+
+    public function serviceDetails($id)
+    {
+        $Service = Service::with('section1', 'section2')->where('type', 'new')->find($id);
+
+        $response = ['Service' => $Service];
+        return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
+
+    }
+
+    public function businesssDetails($id)
+    {
+        $Business_Category = Business_Category::with('section1', 'section2')->find($id);
+
+        $response = ['Business_Category' => $Business_Category];
+        return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
+
+    }
+
+    public function aboutus()
+    {
+        $Aboutus = Aboutus::first();
+        $Clients = Clients::get();
+        $response = ['Aboutus' => $Aboutus, 'Clients' => $Clients];
+        return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
+    }
+
+    public function expertise()
+    {
+        $Expertise = Expertise::with('section1', 'section2')->first();
+        return response()->json(['response' => $Expertise, 'success' => true], JsonResponse::HTTP_OK);
     }
 }
