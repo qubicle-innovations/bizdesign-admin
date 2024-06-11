@@ -9,6 +9,8 @@ use App\Models\Aboutus;
 use App\Models\Testimonials;
 use App\Models\Clients;
 use App\Models\EnquiryManagement;
+use App\Models\ServiceCategory;
+use App\Models\Service;
 
 class FrontendController extends Controller
 {
@@ -21,5 +23,15 @@ class FrontendController extends Controller
         $EnquiryManagement = EnquiryManagement::get();
         $response = ['Banner' => $Banner, 'Aboutus' => $Aboutus, 'Testimonials' => $Testimonials, 'Clients' => $Clients, 'EnquiryManagement' => $EnquiryManagement];
         return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
+    }
+
+    public function serviceDisplay()
+    {
+        $ServiceCategory = ServiceCategory::select('id', 'name')->get();
+        $Service = service::get();
+
+        $response = ['ServiceCategory' => $ServiceCategory, 'Service' => $Service];
+        return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
+
     }
 }

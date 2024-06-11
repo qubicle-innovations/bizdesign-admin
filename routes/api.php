@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/gethomedata', [FrontendController::class, 'index']);
+Route::get('/servicepage', [FrontendController::class, 'serviceDisplay']);
