@@ -9,6 +9,7 @@ use App\Models\ServiceCategory;
 use App\Models\Service;
 use App\Models\ServiceFirstSection;
 use App\Models\ServiceSecondSection;
+use App\Models\serviceData;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
@@ -21,15 +22,18 @@ class ServiceController extends Controller
             $data = ServiceMain::get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('btype', function ($row) {
+                    return $row->type == "old" ? "Already Own Business" : "New Business";
+                })
                 ->addColumn('action', function ($row) {
-                    $url_profile1 = url('admin/service/category/update/' . $row->id);
+                    $url_profile1 = url('admin/service/details/update/' . $row->id);
                     $actionBtn = '<a href=' . $url_profile1 . ' class="btn btn-info"><i class="bx bxs-edit"></i></i></a>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'btype'])
                 ->make(true);
         }
-        return view('service_category.index', compact('cnt'));
+        return view('service_main.index', compact('cnt'));
     }
 
 
@@ -37,8 +41,8 @@ class ServiceController extends Controller
     {
         $ServiceMain = new ServiceMain();
         $id = "";
-        $action_url = url('admin/service/category/create');
-        return view('service_category.form', compact('id', 'ServiceMain', 'action_url'));
+        $action_url = url('admin/service/details/create');
+        return view('service_main.form', compact('id', 'ServiceMain', 'action_url'));
     }
 
     public function store(Request $request)
@@ -46,6 +50,7 @@ class ServiceController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
+                'service_type' => 'required',
                 'stitle' => 'required',
                 'mtitle' => 'required',
                 'description' => 'required',
@@ -58,6 +63,7 @@ class ServiceController extends Controller
                 ->withInput(); // This will repopulate the form fields with old input data
         }
         $ServiceMain = new ServiceMain();
+        $ServiceMain->type = $request->service_type;
         $ServiceMain->stitle = $request->stitle;
         $ServiceMain->mtitle = $request->mtitle;
         $ServiceMain->description = $request->description;
@@ -70,7 +76,7 @@ class ServiceController extends Controller
     {
         $ServiceMain = ServiceMain::find($id);
         $action_url = url('admin/service/details/update/' . $id);
-        return view('service_category.form', compact('id', 'ServiceMain', 'action_url'));
+        return view('service_main.form', compact('id', 'ServiceMain', 'action_url'));
     }
 
     public function update(Request $request, $id)
@@ -78,6 +84,7 @@ class ServiceController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
+                'service_type' => 'required',
                 'stitle' => 'required',
                 'mtitle' => 'required',
                 'description' => 'required',
@@ -90,6 +97,7 @@ class ServiceController extends Controller
                 ->withInput(); // This will repopulate the form fields with old input data
         }
         $ServiceMain = ServiceMain::find($id);
+        $ServiceMain->type = $request->service_type;
         $ServiceMain->stitle = $request->stitle;
         $ServiceMain->mtitle = $request->mtitle;
         $ServiceMain->description = $request->description;
@@ -187,6 +195,9 @@ class ServiceController extends Controller
             $data = Service::get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('btype', function ($row) {
+                    return $row->type == "old" ? "Already Own Business" : "New Business";
+                })
                 ->addColumn('img', function ($row) {
                     $imagePath = 'service/' . $row->logo;
                     $iimg = asset("storage/{$imagePath}");
@@ -200,7 +211,7 @@ class ServiceController extends Controller
                     $actionBtn .= '&nbsp;&nbsp;<a onclick="delete_record(' . $row->id . ')" href="#" class="btn btn-danger"><i class="bx bxs-trash"></i></a>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'img'])
+                ->rawColumns(['action', 'img', 'btype'])
                 ->make(true);
         }
         return view('service.index');
@@ -212,7 +223,7 @@ class ServiceController extends Controller
         $ServiceCategory = ServiceCategory::get();
         $id = "";
         $action_url = url('admin/service/create');
-        return view('service.form', compact('id', 'Service','ServiceCategory', 'action_url'));
+        return view('service.form', compact('id', 'Service', 'ServiceCategory', 'action_url'));
     }
 
     public function store_service(Request $request)
@@ -220,8 +231,10 @@ class ServiceController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
+                'service_type' => 'required',
                 'title' => 'required',
                 'logo' => 'required|mimes:jpg,png,jpeg,gif,svg',
+                'back_image' => 'mimes:jpg,png,jpeg,gif,svg',
                 'description' => 'required',
                 'stitle_sub1' => 'required',
                 'mtitle_sub1' => 'required',
@@ -242,7 +255,8 @@ class ServiceController extends Controller
                 ->withInput(); // This will repopulate the form fields with old input data
         }
         $Service = new Service();
-        $Service->category_id = $request->category_id;
+        $Service->type = $request->service_type;
+        $Service->category_id = $request->category_id ? $request->category_id : 0;
         $Service->title = $request->title;
         $Service->description = $request->description;
         if ($request->hasfile('logo')) {
@@ -250,6 +264,12 @@ class ServiceController extends Controller
             $imageName = time() . '.' . $file->extension();
             $file->storeAs('public/service/', $imageName);
             $Service->logo = $imageName;
+        }
+        if ($request->hasfile('back_image')) {
+            $file_b = $request->file('back_image');
+            $imageName_back = time() . 'bg.' . $file_b->extension();
+            $file_b->storeAs('public/service/', $imageName_back);
+            $Service->back_image = $imageName_back;
         }
         $Service->stitle_sub1 = $request->stitle_sub1;
         $Service->mtitle_sub1 = $request->mtitle_sub1;
@@ -286,13 +306,13 @@ class ServiceController extends Controller
         return redirect('admin/service/section3/' . $Service->id);
     }
 
-    
+
     public function edit_service($id)
     {
         $Service = Service::with('section1')->find($id);
         $ServiceCategory = ServiceCategory::get();
         $action_url = url('admin/service/update/' . $id);
-        return view('service.form', compact('id', 'Service','ServiceCategory', 'action_url'));
+        return view('service.form', compact('id', 'Service', 'ServiceCategory', 'action_url'));
     }
 
     public function update_service(Request $request, $id)
@@ -300,8 +320,10 @@ class ServiceController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
+                'service_type' => 'required',
                 'title' => 'required',
-                'image' => 'mimes:jpg,png,jpeg,gif,svg',
+                'logo' => 'mimes:jpg,png,jpeg,gif,svg',
+                'back_image' => 'mimes:jpg,png,jpeg,gif,svg',
                 'stitle_sub1' => 'required',
                 'mtitle_sub1' => 'required',
                 'title_subsec1.*' => 'required',
@@ -321,12 +343,21 @@ class ServiceController extends Controller
                 ->withInput(); // This will repopulate the form fields with old input data
         }
         $Service = Service::find($id);
+        $Service->type = $request->service_type;
+        $Service->category_id = $request->category_id ? $request->category_id : 0;
         $Service->title = $request->title;
-        if ($request->hasfile('image')) {
-            $file = $request->file('image');
+        $Service->description = $request->description;
+        if ($request->hasfile('logo')) {
+            $file = $request->file('logo');
             $imageName = time() . '.' . $file->extension();
             $file->storeAs('public/service/', $imageName);
-            $Service->image = $imageName;
+            $Service->logo = $imageName;
+        }
+        if ($request->hasfile('back_image')) {
+            $file_b = $request->file('back_image');
+            $imageName_back = time() . 'bg.' . $file_b->extension();
+            $file_b->storeAs('public/service/', $imageName_back);
+            $Service->back_image = $imageName_back;
         }
         $Service->stitle_sub1 = $request->stitle_sub1;
         $Service->mtitle_sub1 = $request->mtitle_sub1;
@@ -429,5 +460,131 @@ class ServiceController extends Controller
         return response()->json([
             'success' => 'Record deleted successfully!'
         ]);
+    }
+
+    public function list_service_data(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = serviceData::get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('btype', function ($row) {
+                    return $row->type == "old" ? "Already Own Business" : "New Business";
+                })
+                ->addColumn('img', function ($row) {
+                    $imagePath = 'service/' . $row->logo;
+                    $iimg = asset("storage/{$imagePath}");
+                    $img = '<div class="img_div"><img src="' . $iimg . '" alt="image" class="img-fluid rounded me-3"></div>';
+
+                    return $img;
+                })
+                ->addColumn('action', function ($row) {
+                    $url_profile1 = url('admin/service/update/' . $row->id);
+                    $actionBtn = '<a href=' . $url_profile1 . ' class="btn btn-info"><i class="bx bxs-edit"></i></i></a>';
+                    // $actionBtn .= '&nbsp;&nbsp;<a onclick="delete_record(' . $row->id . ')" href="#" class="btn btn-danger"><i class="bx bxs-trash"></i></a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action', 'img', 'btype'])
+                ->make(true);
+        }
+        return view('service.index');
+    }
+
+    public function service_data()
+    {
+        $Service = new serviceData();
+        // $ServiceCategory = ServiceCategory::get();
+        $id = "";
+        $action_url = url('admin/service/create');
+        return view('service.add', compact('id', 'Service', 'action_url'));
+    }
+    public function edit_service_data($id)
+    {
+        $Service = serviceData::find($id);
+        $action_url = url('admin/service/update/' . $id);
+        return view('service.add', compact('id', 'Service', 'action_url'));
+    }
+
+    
+    public function save_service_data(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'service_type' => 'required',
+                'title' => 'required',
+                'logo' => 'mimes:jpg,png,jpeg,gif,svg',
+                'back_image' => 'mimes:jpg,png,jpeg,gif,svg',
+                'description' => 'required',
+                'detailed_text' => 'required',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect('admin/service/create')
+                ->withErrors($validator)
+                ->withInput(); // This will repopulate the form fields with old input data
+        }
+        $Service = new serviceData();
+        $Service->type = $request->service_type;
+        $Service->title = $request->title;
+        $Service->description = $request->description;
+        if ($request->hasfile('logo')) {
+            $file = $request->file('logo');
+            $imageName = time() . '.' . $file->extension();
+            $file->storeAs('public/service/', $imageName);
+            $Service->logo = $imageName;
+        }
+        if ($request->hasfile('back_image')) {
+            $file_b = $request->file('back_image');
+            $imageName_back = time() . 'bg.' . $file_b->extension();
+            $file_b->storeAs('public/service/', $imageName_back);
+            $Service->back_image = $imageName_back;
+        } 
+        $Service->detailed_text = $request->detailed_text;
+        $Service->save();
+
+        return redirect('admin/service');
+    }
+
+    public function update_service_data(Request $request, $id)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'service_type' => 'required',
+                'title' => 'required',
+                'logo' => 'mimes:jpg,png,jpeg,gif,svg',
+                'back_image' => 'mimes:jpg,png,jpeg,gif,svg',
+                'description' => 'required',
+                'detailed_text' => 'required',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect('admin/service/update/' . $id)
+                ->withErrors($validator)
+                ->withInput(); // This will repopulate the form fields with old input data
+        }
+        $Service = serviceData::find($id);
+        $Service->type = $request->service_type;
+        $Service->title = $request->title;
+        $Service->description = $request->description;
+        if ($request->hasfile('logo')) {
+            $file = $request->file('logo');
+            $imageName = time() . '.' . $file->extension();
+            $file->storeAs('public/service/', $imageName);
+            $Service->logo = $imageName;
+        }
+        if ($request->hasfile('back_image')) {
+            $file_b = $request->file('back_image');
+            $imageName_back = time() . 'bg.' . $file_b->extension();
+            $file_b->storeAs('public/service/', $imageName_back);
+            $Service->back_image = $imageName_back;
+        } 
+        $Service->detailed_text = $request->detailed_text;
+        $Service->save();
+
+        return redirect('admin/service');
     }
 }

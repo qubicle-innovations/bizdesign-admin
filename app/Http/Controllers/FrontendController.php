@@ -14,6 +14,8 @@ use App\Models\EnquiryManagement;
 use App\Models\ServiceCategory;
 use App\Models\Service;
 use App\Models\Expertise;
+use App\Models\Difference;
+use App\Models\serviceData;
 
 class FrontendController extends Controller
 {
@@ -72,5 +74,18 @@ class FrontendController extends Controller
     {
         $Expertise = Expertise::with('section1', 'section2')->first();
         return response()->json(['response' => $Expertise, 'success' => true], JsonResponse::HTTP_OK);
+    }
+
+    public function difference()
+    {
+        $Difference = Difference::first();
+        return response()->json(['response' => $Difference, 'success' => true], JsonResponse::HTTP_OK);
+    }
+
+    public function service_data($id)
+    {
+        $Service = serviceData::find($id);
+        $response = ['Service' => $Service];
+        return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
     }
 }

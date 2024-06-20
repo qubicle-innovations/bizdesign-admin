@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('category_id')->foreign('category_id')->references('id')->on('service_categories')->onDelete('cascade');
             $table->index('category_id');
             $table->string('logo');
+            $table->string('back_image');
             $table->string('title');
             $table->text('description');
             $table->string('stitle_sub1')->nullable();

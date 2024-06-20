@@ -135,11 +135,20 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('service/category/delete/{id}', [ServiceController::class, 'destroy_categor']);
 
 
-        Route::get('service', [ServiceController::class, 'list_service']);
-        Route::get('service/create', [ServiceController::class, 'create_service']);
-        Route::post('service/create', [ServiceController::class, 'store_service']);
-        Route::get('service/update/{id}', [ServiceController::class, 'edit_service']);
-        Route::post('service/update/{id}', [ServiceController::class, 'update_service']);
+        // Route::get('service', [ServiceController::class, 'list_service']);
+        // Route::get('service/create', [ServiceController::class, 'create_service']);
+        // Route::post('service/create', [ServiceController::class, 'store_service']);
+        // Route::get('service/update/{id}', [ServiceController::class, 'edit_service']);
+        // Route::post('service/update/{id}', [ServiceController::class, 'update_service']);
+        // Route::get('service/section3/{id}', [ServiceController::class, 'form_section3']);
+        // Route::post('service/section3/{id}', [ServiceController::class, 'update_section3']);
+        // Route::delete('service/delete/{id}', [ServiceController::class, 'destroy_service']);
+
+        Route::get('service', [ServiceController::class, 'list_service_data']);
+        Route::get('service/create', [ServiceController::class, 'service_data']);
+        Route::post('service/create', [ServiceController::class, 'save_service_data']);
+        Route::get('service/update/{id}', [ServiceController::class, 'edit_service_data']);
+        Route::post('service/update/{id}', [ServiceController::class, 'update_service_data']);
         Route::get('service/section3/{id}', [ServiceController::class, 'form_section3']);
         Route::post('service/section3/{id}', [ServiceController::class, 'update_section3']);
         Route::delete('service/delete/{id}', [ServiceController::class, 'destroy_service']);

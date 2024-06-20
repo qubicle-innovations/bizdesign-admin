@@ -38,6 +38,17 @@ Service Setup
                         {{ csrf_field() }}
                         <div class="row">
                             <div class="mb-3">
+                                <label class="col-md-2 col-form-label">Select Service Type</label>
+                                <select name="service_type" class="form-select service_type">
+                                    <option>Select</option>
+                                    <option @if($ServiceMain->type == "old") selected @endif value="old">Already Own Business?
+                                    </option>
+                                    <option @if($ServiceMain->type == "new") selected @endif value="new">New Business</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3">
                                 <label class="form-label" for="validationCustom01">Small Title</label>
                                 <input type="text" class="form-control" id="validationCustom01" name="stitle"
                                     placeholder="Small Title" value="{{ old('stitle', $ServiceMain->stitle) }}"
@@ -51,8 +62,7 @@ Service Setup
                             <div class="mb-3">
                                 <label class="form-label" for="validationCustom01">Main Title</label>
                                 <input type="text" class="form-control" id="validationCustom01" name="mtitle"
-                                    placeholder="Main Title" value="{{ old('mtitle', $ServiceMain->mtitle) }}"
-                                    required>
+                                    placeholder="Main Title" value="{{ old('mtitle', $ServiceMain->mtitle) }}" required>
                                 <div class="invalid-feedback">
                                     Please enter main title.
                                 </div>

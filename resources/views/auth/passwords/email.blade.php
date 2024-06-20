@@ -28,7 +28,7 @@
                                 <div class="card-body p-4">
                                     <div class="text-center mt-2">
                                         <h5>Reset Password</h5>
-                                        <p class="text-muted">Reset Password with fxuae-admin.</p>
+                                        <p class="text-muted">Reset Password with BizDesign-admin.</p>
                                     </div>
                                     <div class="p-2 mt-4">
 

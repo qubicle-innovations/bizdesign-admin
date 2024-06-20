@@ -38,9 +38,21 @@ Service
                         {{ csrf_field() }}
                         <div class="row">
                         <div class="mb-3">
-                            <label class="col-md-2 col-form-label">Select Category</label>
-                                <select name="category_id" class="form-select">
+                            <label class="col-md-2 col-form-label">Select Service Type</label>
+                                <select name="service_type" class="form-select service_type">
                                     <option>Select</option>
+                                    <option @if($Service->type == "old") selected @endif
+                                        value="old">Already Own Business?</option>
+                                    <option @if($Service->type == "new") selected @endif
+                                        value="new">New Business</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row  service_cat">
+                        <div class="mb-3">
+                            <label class="col-md-2 col-form-label">Select Category</label>
+                                <select name="category_id" class="form-select category_id" required>
+                                    <option value="0">Select</option>
                                     @foreach($ServiceCategory as $key=>$category)
                                     <option @if($Service->category_id == $category->id) selected @endif
                                         value="{{ $category->id }}">{{ $category->name }}</option>
@@ -60,8 +72,7 @@ Service
                         </div>
                         <div class="row">
                             <div class="mb-3">
-                                <label class="form-label" for="validationCustom02">Description
-                                </label>
+                                <label class="form-label" for="validationCustom02">Description</label>
                                 <textarea name="description" rows="5" class="form-control" placeholder="Description"
                                     required>{{ old('description', $Service->description) }}</textarea>
                                 <div class="invalid-feedback">
@@ -84,6 +95,24 @@ Service
                                 <div class="mb-3">
                                     <img id="imgPreview" width="100px" height="100px"
                                         src="{{ asset('storage') }}/service/{{ $Service->logo }}" alt="pic" />
+                                </div>
+                            </div>
+                        @endif
+                        <div class="row service_bgimage">
+                            <div class="mb-3">
+                                <label class="form-label" for="validationCustom05">Background Image</label>
+                                <input type="file" class="form-control back_image" id="validationCustom05" name="back_image"
+                                    placeholder="Background Image" @if(empty($Service->back_image)) required @endif>
+                                <div class="invalid-feedback">
+                                    Please upload background image.
+                                </div>
+                            </div>
+                        </div>
+                        @if(!empty($Service->back_image))
+                            <div class="row">
+                                <div class="mb-3">
+                                    <img id="imgPreview" width="100px" height="100px"
+                                        src="{{ asset('storage') }}/service/{{ $Service->back_image }}" alt="pic" />
                                 </div>
                             </div>
                         @endif
@@ -322,6 +351,20 @@ Service
 
     <script>
         $(document).ready(function () {
+            $('.service_type').change(function () {
+                if ($(this).val() === 'old') {
+                    $('.service_cat').hide();
+                    $('.category_id').attr("required", false);
+                    $('.back_image').attr("required", false);
+                    $('.service_bgimage').hide();
+                } else {
+                    $('.service_cat').show();
+                    $('.category_id').attr("required", true);
+                    $('.back_image').attr("required", true);
+                    $('.service_bgimage').show();
+                }
+            });
+
             $('#add-more').click(function () {
                 var clone = $('.cloneable-fieldset:first').clone();
                 clone.find('input, textarea').val('');

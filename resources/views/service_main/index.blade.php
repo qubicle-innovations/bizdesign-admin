@@ -2,10 +2,10 @@
 @section('css')
 <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
 @section('title')
-Business Setup
+Service Main
 @endsection
 @section('page-title')
-Business Setup
+Service Main
 @endsection
 @section('body')
 
@@ -16,8 +16,8 @@ Business Setup
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Business Setup
-                        @if($cnt==0)<a href="{{ url('admin/business/create') }}" type="button" class="btn btn-dark waves-effect waves-light float-end">Create</a>@endif
+                    <h4 class="card-title">Service Main
+                        @if($cnt==1)<a href="{{ url('admin/service/details/create') }}" type="button" class="btn btn-dark waves-effect waves-light float-end">Create</a>@endif
                     </h4>
                 </div>
 
@@ -38,6 +38,7 @@ Business Setup
                         <thead>
                             <tr>
                                 <th>Sl.No</th>
+                                <th>Type</th>
                                 <th>Small Title</th>
                                 <th>Main Title</th>
                                 <th style="display:none">Id</th>
@@ -63,7 +64,7 @@ Business Setup
 
     <script>
         $(document).ready(function () {
-            var url = "{{ url('admin/business') }}";
+            var url = "{{ url('admin/service/details') }}";
             var table = $('#server-datatable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -74,6 +75,10 @@ Business Setup
                 //pageLength: 2,
                 order: [[2, 'desc']],
                 columns: [{ data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                {
+                    data: 'btype',
+                    name: 'btype'
+                },
                 {
                     data: 'stitle',
                     name: 'stitle'

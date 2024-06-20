@@ -40,6 +40,7 @@ Service
                         <thead>
                             <tr>
                                 <th>Sl.No</th>
+                                <th>Type</th>
                                 <th>Title</th>
                                 <th>Logo</th>
                                 <th style="display:none">Id</th>
@@ -76,6 +77,10 @@ Service
                 //pageLength: 2,
                 order: [[3, 'desc']],
                 columns: [{ data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                {
+                    data: 'btype',
+                    name: 'btype'
+                },
                 {
                     data: 'title',
                     name: 'title'
