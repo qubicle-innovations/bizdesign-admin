@@ -16,12 +16,13 @@ use App\Models\Service;
 use App\Models\Expertise;
 use App\Models\Difference;
 use App\Models\serviceData;
+use App\Models\BusinessData;
 
 class FrontendController extends Controller
 {
     public function index()
     {
-        $Banner = Banner::get();
+         $Banner = Banner::get();
         $Aboutus = Aboutus::select('id', 'stitle_1', 'mtitle_1', 'description_1', 'image_1')->first();
         $Business_Setup = Business_Setup::select('id', 'stitle', 'mtitle')->first();
         $Business_Category = Business_Category::select('id', 'title', 'image', 'points_sub2')->take(3)->get();
@@ -29,7 +30,7 @@ class FrontendController extends Controller
         $Testimonials = Testimonials::get();
         $Clients = Clients::get();
         $EnquiryManagement = EnquiryManagement::first();
-        $response = ['Banner' => $Banner, 'Aboutus' => $Aboutus, 'Business_Setup' => $Business_Setup, 'Business_Category', $Business_Category, 'Service' => $Service, 'Testimonials' => $Testimonials, 'Clients' => $Clients, 'EnquiryManagement' => $EnquiryManagement];
+        $response = ['Banner' => $Banner, 'Aboutus' => $Aboutus, 'Business_Setup' => $Business_Setup, 'Business_Category'=> $Business_Category, 'Service' => $Service, 'Testimonials' => $Testimonials, 'Clients' => $Clients, 'EnquiryManagement' => $EnquiryManagement];
         return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
     }
 
@@ -44,6 +45,7 @@ class FrontendController extends Controller
 
     }
 
+
     public function serviceDetails($id)
     {
         $Service = Service::with('section1', 'section2')->where('type', 'new')->find($id);
@@ -53,19 +55,20 @@ class FrontendController extends Controller
 
     }
 
-    public function businesssDetails($id)
+      public function businessDetails($id)
     {
-        $Business_Category = Business_Category::with('section1', 'section2')->find($id);
+        $Business = Business_Category::with('section1', 'section2')->find($id);
 
-        $response = ['Business_Category' => $Business_Category];
+        $response = ['Business' => $Business];
         return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
 
     }
 
+
     public function aboutus()
     {
         $Aboutus = Aboutus::first();
-        $Clients = Clients::get();
+        $Clients = Clients::get(); 
         $response = ['Aboutus' => $Aboutus, 'Clients' => $Clients];
         return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
     }
@@ -75,17 +78,22 @@ class FrontendController extends Controller
         $Expertise = Expertise::with('section1', 'section2')->first();
         return response()->json(['response' => $Expertise, 'success' => true], JsonResponse::HTTP_OK);
     }
-
+    
     public function difference()
     {
         $Difference = Difference::first();
         return response()->json(['response' => $Difference, 'success' => true], JsonResponse::HTTP_OK);
     }
-
     public function service_data($id)
     {
         $Service = serviceData::find($id);
         $response = ['Service' => $Service];
+        return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
+    }
+    public function business_data($id)
+    {
+        $BusinessData = BusinessData::find($id);
+        $response = ['BusinessData' => $BusinessData];
         return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
     }
 }

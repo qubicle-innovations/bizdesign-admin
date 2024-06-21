@@ -73,6 +73,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ url('admin/business/category') }}">
+                        <i class='bx bx-buildings icon nav-icon'></i>
+                        <span class="menu-item" data-key="t-business">Business Setup</span>
+                    </a>
+                </li>
+                <!-- <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i class="bx bx-buildings icon nav-icon"></i>
                         <span class="menu-item" data-key="t-business">Business Setup</span>
@@ -81,8 +87,8 @@
                         <li><a href="{{ url('admin/business') }}" data-key="t-detail">Details</a></li>
                         <li><a href="{{ url('admin/business/category') }}" data-key="t-category">Category Details</a></li>
                     </ul>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <a href="javascript: void(0);" class="has-arrow">
                         <i class="bx bx-box icon nav-icon"></i>
                         <span class="menu-item" data-key="t-servicemain">Service</span>
@@ -92,6 +98,12 @@
                         <li><a href="{{ url('admin/service/category') }}" data-key="t-category">Category Details</a></li>
                         <li><a href="{{ url('admin/service') }}" data-key="t-service">New Service</a></li>
                     </ul>
+                </li> -->
+                <li>
+                    <a href="{{ url('admin/service') }}">
+                        <i class='bx bx-box icon nav-icon'></i>
+                        <span class="menu-item" data-key="t-servicemain">Service</span>
+                    </a>
                 </li>
             </ul>
         </div>

@@ -36,7 +36,7 @@ Service
                     <form class="needs-validation" novalidate method="post" action="{{ $action_url }}"
                         enctype="multipart/form-data">
                         {{ csrf_field() }}
-                        <div class="row">
+                        <div class="row no-display">
                             <div class="mb-3">
                                 <label class="col-md-2 col-form-label">Select Service Type</label>
                                 <select name="service_type" class="form-select service_type">
@@ -49,15 +49,15 @@ Service
                         </div>
                         <div class="row">
                             <div class="mb-3">
-                                <label class="form-label" for="validationCustom01">Title</label>
+                                <label class="form-label no-display" for="validationCustom01">Title</label>
                                 <input type="text" class="form-control" id="validationCustom01" name="title"
-                                    placeholder="Title" value="{{ old('title', $Service->title) }}" required>
+                                    placeholder="Title" @if(!empty($Service->title)) readOnly @endif value="{{ old('title', $Service->title) }}" required>
                                 <div class="invalid-feedback">
                                     Please enter title.
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row no-display">
                             <div class="mb-3">
                                 <label class="form-label" for="validationCustom02">Description
                                 </label>
@@ -68,7 +68,7 @@ Service
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row no-display">
                             <div class="mb-3">
                                 <label class="form-label" for="validationCustom05">Logo</label>
                                 <input type="file" class="form-control" id="validationCustom05" name="logo"
@@ -79,14 +79,14 @@ Service
                             </div>
                         </div>
                         @if(!empty($Service->logo))
-                            <div class="row">
+                            <div class="row no-display">
                                 <div class="mb-3">
                                     <img id="imgPreview" width="100px" height="100px"
                                         src="{{ asset('storage') }}/service/{{ $Service->logo }}" alt="pic" />
                                 </div>
                             </div>
                         @endif
-                        <div class="row service_bgimage">
+                        <div class="row service_bgimage no-display">
                             <div class="mb-3">
                                 <label class="form-label" for="validationCustom05">Background Image</label>
                                 <input type="file" class="form-control back_image" id="validationCustom05"
@@ -98,18 +98,17 @@ Service
                             </div>
                         </div>
                         @if(!empty($Service->back_image))
-                            <div class="row">
+                            <div class="row no-display">
                                 <div class="mb-3">
                                     <img id="imgPreview" width="100px" height="100px"
                                         src="{{ asset('storage') }}/service/{{ $Service->back_image }}" alt="pic" />
                                 </div>
                             </div>
                         @endif
-                        <div class="card">
+                        <!-- <div class="card">
                             <div class="card-header">
-                                <!-- <h5 class="card-title">Section </h5> -->
                             </div>
-                            <div class="card-body">
+                            <div class="card-body"> -->
                                 <div class="row">
                                     <div class="mb-3"> 
                                         <label class="form-label" for="validationCustom02">Detailed Description</label>
@@ -119,8 +118,8 @@ Service
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            <!-- </div>
+                        </div> -->
                         <button class="btn btn-primary" type="submit">Save</button>
                     </form>
                 </div>

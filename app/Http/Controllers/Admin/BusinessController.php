@@ -8,6 +8,7 @@ use App\Models\Business_Setup;
 use App\Models\Business_Category;
 use App\Models\Business_Firstsection;
 use App\Models\Business_Secondsection;
+use App\Models\BusinessData;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
@@ -334,5 +335,84 @@ class BusinessController extends Controller
         return response()->json([
             'success' => 'Record deleted successfully!'
         ]);
+    }
+
+
+    public function list_category_data(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = BusinessData::get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $url_profile1 = url('admin/business/category/update/' . $row->id);
+                    $actionBtn = '<a href=' . $url_profile1 . ' class="btn btn-info"><i class="bx bxs-edit"></i></i></a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('business_category.index');
+    }
+
+
+    public function create_category_data()
+    {
+        $Business_Category = new BusinessData();
+        $id = "";
+        $action_url = url('admin/business/category/create');
+        return view('business_category.add', compact('id', 'Business_Category', 'action_url'));
+    }
+
+    public function store_category_data(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'title' => 'required',
+                'detailed_text' => 'required',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect('admin/business/category/create')
+                ->withErrors($validator)
+                ->withInput(); // This will repopulate the form fields with old input data
+        }
+        $Business_Category = new BusinessData();
+        $Business_Category->title = $request->title;
+        $Business_Category->detailed_text = $request->detailed_text;
+        $Business_Category->save();
+        return redirect('admin/business/category');
+    }
+
+    public function edit_category_data($id)
+    {
+        $Business_Category = BusinessData::find($id);
+        $action_url = url('admin/business/category/update/' . $id);
+        return view('business_category.add', compact('id', 'Business_Category', 'action_url'));
+    }
+
+    public function update_category_data(Request $request, $id)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'title' => 'required',
+                'detailed_text' => 'required',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect('admin/business/category/update/' . $id)
+                ->withErrors($validator)
+                ->withInput(); // This will repopulate the form fields with old input data
+        }
+        $Business_Category = BusinessData::find($id);
+        $Business_Category->title = $request->title;
+        $Business_Category->detailed_text = $request->detailed_text;
+        $Business_Category->save();
+
+        return redirect('admin/business/category');
     }
 }

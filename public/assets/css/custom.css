@@ -22,3 +22,7 @@ th {
 .cke_bottom {
     display: none !important;
 }
+
+.no-display{
+    display: none !important;
+}

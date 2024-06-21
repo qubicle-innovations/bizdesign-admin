@@ -17,8 +17,8 @@ Business Category
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Business Category
-                        <a href="{{ url('admin/business/category/create') }}" type="button"
-                            class="btn btn-dark waves-effect waves-light float-end">Create</a>
+                        <!-- <a href="{{ url('admin/business/category/create') }}" type="button"
+                            class="btn btn-dark waves-effect waves-light float-end">Create</a> -->
                     </h4>
                 </div>
 
@@ -41,7 +41,7 @@ Business Category
                             <tr>
                                 <th>Sl.No</th>
                                 <th>Category</th>
-                                <th>Image</th>
+                                <!-- <th>Image</th> -->
                                 <th style="display:none">Id</th>
                                 <th>Action</th>
                             </tr>
@@ -80,10 +80,10 @@ Business Category
                     data: 'title',
                     name: 'title'
                 },
-                {
-                    data: 'img',
-                    name: 'image'
-                },
+                // {
+                //     data: 'img',
+                //     name: 'image'
+                // },
                 {
                     data: 'id',
                     name: 'id',

@@ -25,6 +25,7 @@ Route::get('/aboutus', [FrontendController::class, 'aboutus']);
 Route::get('/servicepage', [FrontendController::class, 'serviceDisplay']);
 Route::get('/servicedetail/{id}', [FrontendController::class, 'service_data']);
 // Route::get('/servicedetail/{id}', [FrontendController::class, 'serviceDetails']);
-Route::get('/businessdetail/{id}', [FrontendController::class, 'businessDetails']);
+// Route::get('/businessdetail/{id}', [FrontendController::class, 'businessDetails']);
+Route::get('/businessdetail/{id}', [FrontendController::class, 'business_data']);
 Route::get('/expertise', [FrontendController::class, 'expertise']);
 Route::get('/difference', [FrontendController::class, 'difference']);

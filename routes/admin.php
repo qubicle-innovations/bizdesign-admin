@@ -89,15 +89,22 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('business/view/{id}', [BusinessController::class, 'view']);
 
 
-        Route::get('business/category', [BusinessController::class, 'list_category']);
-        Route::get('business/category/create', [BusinessController::class, 'create_category']);
-        Route::post('business/category/create', [BusinessController::class, 'store_category']);
-        Route::get('business/category/update/{id}', [BusinessController::class, 'edit_category']);
-        Route::post('business/category/update/{id}', [BusinessController::class, 'update_category']);
-        Route::get('business/category/section3/{id}', [BusinessController::class, 'form_section3']);
-        Route::post('business/category/section3/{id}', [BusinessController::class, 'update_section3']);
-        Route::delete('business/category/delete/{id}', [BusinessController::class, 'destroy']);
-        Route::get('business/category/view/{id}', [BusinessController::class, 'view_category']);
+        Route::get('business/category', [BusinessController::class, 'list_category_data']);
+        Route::get('business/category/create', [BusinessController::class, 'create_category_data']);
+        Route::post('business/category/create', [BusinessController::class, 'store_category_data']);
+        Route::get('business/category/update/{id}', [BusinessController::class, 'edit_category_data']);
+        Route::post('business/category/update/{id}', [BusinessController::class, 'update_category_data']);
+
+
+        // Route::get('business/category', [BusinessController::class, 'list_category']);
+        // Route::get('business/category/create', [BusinessController::class, 'create_category']);
+        // Route::post('business/category/create', [BusinessController::class, 'store_category']);
+        // Route::get('business/category/update/{id}', [BusinessController::class, 'edit_category']);
+        // Route::post('business/category/update/{id}', [BusinessController::class, 'update_category']);
+        // Route::get('business/category/section3/{id}', [BusinessController::class, 'form_section3']);
+        // Route::post('business/category/section3/{id}', [BusinessController::class, 'update_section3']);
+        // Route::delete('business/category/delete/{id}', [BusinessController::class, 'destroy']);
+        // Route::get('business/category/view/{id}', [BusinessController::class, 'view_category']);
 
 
         Route::get('enquiry', [EnquiryManagementController::class, 'index']);
@@ -153,4 +160,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('service/section3/{id}', [ServiceController::class, 'update_section3']);
         Route::delete('service/delete/{id}', [ServiceController::class, 'destroy_service']);
     });
+});
+
+Route::get('/clear-cache', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('optimize:clear');
+    
+    return "Cache is cleared";
 });
