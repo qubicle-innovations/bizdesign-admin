@@ -1,5 +1,5 @@
 /*
-Template Name: webadmin - Admin & Dashboard Template
+Template Name: BizDesign Admin
 Author: Themesdesign
 Version: 2.2.0
 Website: https://Themesdesign.com/
