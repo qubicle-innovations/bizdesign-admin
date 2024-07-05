@@ -17,6 +17,8 @@ use App\Models\Expertise;
 use App\Models\Difference;
 use App\Models\serviceData;
 use App\Models\BusinessData;
+use App\Models\BankingEnquiry;
+use Illuminate\Support\Facades\Validator;
 
 class FrontendController extends Controller
 {
@@ -95,5 +97,42 @@ class FrontendController extends Controller
         $BusinessData = BusinessData::find($id);
         $response = ['BusinessData' => $BusinessData];
         return response()->json(['response' => $response, 'success' => true], JsonResponse::HTTP_OK);
+    }
+
+    public function banking_enquiry(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'client_name' => 'required',
+                'client_email' => 'required',
+                'client_phone' => 'required',
+            ]
+        );
+
+        if ($validator->fails()) {            
+            return response()->json(['response' => $validator, 'success' => false], JsonResponse::HTTP_BAD_REQUEST);
+        }
+        $BankingEnquiry = new BankingEnquiry();
+        
+        $BankingEnquiry->existing_business = $request->existing_business;
+        $BankingEnquiry->company_name = $request->company_name;
+        $BankingEnquiry->registered_in = $request->registered_in;
+        $BankingEnquiry->residence_visa = $request->residence_visa;
+        $BankingEnquiry->business_office = $request->business_office;
+        $BankingEnquiry->bank_statement = $request->bank_statement;
+        $BankingEnquiry->engaged_activities = $request->engaged_activities;
+        $BankingEnquiry->proof_address = $request->proof_address;
+        $BankingEnquiry->work_countries = $request->work_countries;
+        $BankingEnquiry->biz_client = $request->biz_client;
+        $BankingEnquiry->currencies_required = $request->currencies_required;
+        $BankingEnquiry->client_name = $request->client_name;
+        $BankingEnquiry->client_nationality = $request->client_nationality;
+        $BankingEnquiry->client_comments = $request->client_comments;
+        $BankingEnquiry->client_phone = $request->client_phone;
+        $BankingEnquiry->client_email = $request->client_email;
+        $BankingEnquiry->save();        
+        return response()->json(['response' => "Submitted successfuly", 'success' => true], JsonResponse::HTTP_OK);
+        															
     }
 }
